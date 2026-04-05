@@ -10,6 +10,15 @@ async function bootstrap() {
     .setDescription('API for prompt engineering')
     .setVersion('1.0')
     .addTag('prompts')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter your JWT token',
+      },
+      'clerk-jwt',
+    )
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);

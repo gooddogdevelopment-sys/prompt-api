@@ -11,9 +11,10 @@ import { PromptsService } from './prompt.service';
 import { CreatePromptDto } from './entities/DTO/create-prompt.dto';
 import { Prompt } from './entities/prompt.entity';
 import { UpdatePromptDto } from './entities/DTO/update-prompt.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('prompts')
+@ApiBearerAuth('clerk-jwt')
 @Controller('prompts')
 export class PromptController {
   constructor(private readonly promptsService: PromptsService) {}
