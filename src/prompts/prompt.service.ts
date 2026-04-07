@@ -2,8 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Prompt } from './entities/prompt.entity';
-import { CreatePromptDto } from './entities/DTO/create-prompt.dto';
-import { UpdatePromptDto } from './entities/DTO/update-prompt.dto';
+import { CreatePromptDto } from './entities/dto/create-prompt.dto';
+import { UpdatePromptDto } from './entities/dto/update-prompt.dto';
+import { GetPromptDto } from './entities/dto/get-prompt.dto';
 
 @Injectable()
 export class PromptsService {
@@ -12,24 +13,40 @@ export class PromptsService {
     private readonly promptRepository: Repository<Prompt>,
   ) {}
 
-  async create(createPromptDto: CreatePromptDto): Promise<Prompt> {
+  private toDto(prompt: Prompt): GetPromptDto {
+    const dto = new GetPromptDto();
+    dto.id = prompt.id;
+    dto.title = prompt.title;
+    dto.content = prompt.content;
+    dto.isActive = prompt.isActive;
+    dto.createdAt = prompt.createdAt;
+    dto.updatedAt = prompt.updatedAt;
+    return dto;
+  }
+
+  async create(createPromptDto: CreatePromptDto): Promise<GetPromptDto> {
     const prompt = this.promptRepository.create(createPromptDto);
-    return await this.promptRepository.save(prompt);
+    const saved = await this.promptRepository.save(prompt);
+    return this.toDto(saved);
   }
 
-  async findAll(): Promise<Prompt[]> {
-    return await this.promptRepository.find();
+  async findAll(): Promise<GetPromptDto[]> {
+    const prompts = await this.promptRepository.find();
+    return prompts.map((p) => this.toDto(p));
   }
 
-  async findOne(id: string): Promise<Prompt> {
+  async findOne(id: string): Promise<GetPromptDto> {
     const prompt = await this.promptRepository.findOneBy({ id });
     if (!prompt) {
       throw new NotFoundException(`Prompt with ID ${id} not found`);
     }
-    return prompt;
+    return this.toDto(prompt);
   }
 
-  async update(id: string, updatePromptDto: UpdatePromptDto): Promise<Prompt> {
+  async update(
+    id: string,
+    updatePromptDto: UpdatePromptDto,
+  ): Promise<GetPromptDto> {
     const prompt = await this.promptRepository.preload({
       id: id,
       ...updatePromptDto,
@@ -37,11 +54,15 @@ export class PromptsService {
     if (!prompt) {
       throw new NotFoundException(`Prompt with ID ${id} not found`);
     }
-    return this.promptRepository.save(prompt);
+    const saved = await this.promptRepository.save(prompt);
+    return this.toDto(saved);
   }
 
   async remove(id: string): Promise<void> {
-    const prompt = await this.findOne(id);
+    const prompt = await this.promptRepository.findOneBy({ id });
+    if (!prompt) {
+      throw new NotFoundException(`Prompt with ID ${id} not found`);
+    }
     await this.promptRepository.remove(prompt);
   }
 }

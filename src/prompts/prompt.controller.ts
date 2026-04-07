@@ -8,9 +8,9 @@
   Put,
 } from '@nestjs/common';
 import { PromptsService } from './prompt.service';
-import { CreatePromptDto } from './entities/DTO/create-prompt.dto';
-import { Prompt } from './entities/prompt.entity';
-import { UpdatePromptDto } from './entities/DTO/update-prompt.dto';
+import { CreatePromptDto } from './entities/dto/create-prompt.dto';
+import { UpdatePromptDto } from './entities/dto/update-prompt.dto';
+import { GetPromptDto } from './entities/dto/get-prompt.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('prompts')
@@ -20,17 +20,19 @@ export class PromptController {
   constructor(private readonly promptsService: PromptsService) {}
 
   @Post()
-  async create(@Body() createPromptDto: CreatePromptDto): Promise<Prompt> {
+  async create(
+    @Body() createPromptDto: CreatePromptDto,
+  ): Promise<GetPromptDto> {
     return await this.promptsService.create(createPromptDto);
   }
 
   @Get()
-  async findAll(): Promise<Prompt[]> {
+  async findAll(): Promise<GetPromptDto[]> {
     return await this.promptsService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Prompt> {
+  async findOne(@Param('id') id: string): Promise<GetPromptDto> {
     return await this.promptsService.findOne(id);
   }
 
@@ -38,7 +40,7 @@ export class PromptController {
   async update(
     @Param('id') id: string,
     @Body() updatePromptDto: UpdatePromptDto,
-  ): Promise<Prompt> {
+  ): Promise<GetPromptDto> {
     return await this.promptsService.update(id, updatePromptDto);
   }
 

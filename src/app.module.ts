@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Prompt } from './prompts/entities/prompt.entity';
 import { PromptModule } from './prompts/prompt.module';
 import { ClerkAuthGuard } from './auth/clerk-auth.guard';
+import { InjectUserInterceptor } from './auth/inject-user.interceptor';
 
 @Module({
   imports: [
@@ -27,6 +28,10 @@ import { ClerkAuthGuard } from './auth/clerk-auth.guard';
     {
       provide: APP_GUARD,
       useClass: ClerkAuthGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: InjectUserInterceptor,
     },
   ],
 })

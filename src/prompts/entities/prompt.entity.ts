@@ -25,4 +25,7 @@ export class Prompt {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column()
+  userId: string;
 }

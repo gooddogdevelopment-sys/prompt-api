@@ -5,9 +5,16 @@
   IsOptional,
   IsBoolean,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  ApiHideProperty,
+  ApiProperty,
+  ApiPropertyOptional,
+} from '@nestjs/swagger';
 
 export class CreatePromptDto {
+  @ApiHideProperty()
+  userId: string;
+
   @ApiProperty({ example: 'My prompt title', minLength: 3 })
   @IsString()
   @IsNotEmpty()
