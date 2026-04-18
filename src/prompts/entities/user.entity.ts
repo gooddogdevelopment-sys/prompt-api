@@ -17,9 +17,6 @@ export class User {
   @Column('text')
   providerUserId: string; //This id is to store the third party auth user id.
 
-  @Column('text')
-  email: string;
-
   @OneToMany(() => Prompt, (prompt) => prompt.user)
   prompts: Prompt[];
 
