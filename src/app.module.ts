@@ -9,7 +9,7 @@ import { PromptModule } from './prompts/prompt.module';
 import { UsersModule } from './users/users.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { ClerkAuthGuard } from './auth/clerk-auth.guard';
-import { InjectUserInterceptor } from './auth/inject-user.interceptor';
+import { ResolveUserInterceptor } from './auth/inject-user.interceptor';
 
 @Module({
   imports: [
@@ -36,7 +36,7 @@ import { InjectUserInterceptor } from './auth/inject-user.interceptor';
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: InjectUserInterceptor,
+      useClass: ResolveUserInterceptor,
     },
   ],
 })

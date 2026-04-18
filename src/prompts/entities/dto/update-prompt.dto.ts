@@ -1,4 +1,4 @@
-﻿import {
+import {
   IsString,
   IsNotEmpty,
   MinLength,
@@ -6,12 +6,8 @@
   IsBoolean,
   IsObject,
 } from 'class-validator';
-import { ApiHideProperty } from '@nestjs/swagger';
 
 export class UpdatePromptDto {
-  @ApiHideProperty()
-  userId: string;
-
   @IsString()
   @IsNotEmpty()
   @MinLength(3)

@@ -25,19 +25,27 @@ export class PromptsService {
     return dto;
   }
 
-  async create(createPromptDto: CreatePromptDto): Promise<GetPromptDto> {
-    const prompt = this.promptRepository.create(createPromptDto);
+  async create(
+    createPromptDto: CreatePromptDto,
+    userId: string,
+  ): Promise<GetPromptDto> {
+    const prompt = this.promptRepository.create({
+      ...createPromptDto,
+      userId,
+    });
     const saved = await this.promptRepository.save(prompt);
     return this.toDto(saved);
   }
 
-  async findAll(): Promise<GetPromptDto[]> {
-    const prompts = await this.promptRepository.find();
+  async findAll(userId: string): Promise<GetPromptDto[]> {
+    const prompts = await this.promptRepository.find({ where: { userId } });
     return prompts.map((p) => this.toDto(p));
   }
 
-  async findOne(id: string): Promise<GetPromptDto> {
-    const prompt = await this.promptRepository.findOneBy({ id });
+  async findOne(id: string, userId: string): Promise<GetPromptDto> {
+    const prompt = await this.promptRepository.findOne({
+      where: { id, userId },
+    });
     if (!prompt) {
       throw new NotFoundException(`Prompt with ID ${id} not found`);
     }
@@ -47,9 +55,17 @@ export class PromptsService {
   async update(
     id: string,
     updatePromptDto: UpdatePromptDto,
+    userId: string,
   ): Promise<GetPromptDto> {
+    const existing = await this.promptRepository.findOne({
+      where: { id, userId },
+    });
+    if (!existing) {
+      throw new NotFoundException(`Prompt with ID ${id} not found`);
+    }
+
     const prompt = await this.promptRepository.preload({
-      id: id,
+      id,
       ...updatePromptDto,
     });
     if (!prompt) {
@@ -59,8 +75,10 @@ export class PromptsService {
     return this.toDto(saved);
   }
 
-  async remove(id: string): Promise<void> {
-    const prompt = await this.promptRepository.findOneBy({ id });
+  async remove(id: string, userId: string): Promise<void> {
+    const prompt = await this.promptRepository.findOne({
+      where: { id, userId },
+    });
     if (!prompt) {
       throw new NotFoundException(`Prompt with ID ${id} not found`);
     }

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../prompts/entities/user.entity';
@@ -30,5 +30,17 @@ export class UsersService {
       `Created user id=${saved.id} for providerUserId=${providerUserId}`,
     );
     return saved;
+  }
+
+  async findByProviderUserId(providerUserId: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { providerUserId },
+    });
+    if (!user) {
+      throw new UnauthorizedException(
+        `No local user found for providerUserId=${providerUserId}`,
+      );
+    }
+    return user;
   }
 }

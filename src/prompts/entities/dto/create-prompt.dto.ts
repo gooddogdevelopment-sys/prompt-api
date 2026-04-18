@@ -1,20 +1,13 @@
-﻿import {
+import {
   IsString,
   IsNotEmpty,
   MinLength,
   IsOptional,
   IsBoolean,
 } from 'class-validator';
-import {
-  ApiHideProperty,
-  ApiProperty,
-  ApiPropertyOptional,
-} from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreatePromptDto {
-  @ApiHideProperty()
-  userId: string;
-
   @ApiProperty({ example: 'My prompt title', minLength: 3 })
   @IsString()
   @IsNotEmpty()
