@@ -3,7 +3,9 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // `rawBody: true` preserves the untouched request body on `req.rawBody`,
+  // which the Clerk webhook controller needs to verify the svix HMAC.
+  const app = await NestFactory.create(AppModule, { rawBody: true });
 
   const config = new DocumentBuilder()
     .setTitle('Prompt Engineer API')
