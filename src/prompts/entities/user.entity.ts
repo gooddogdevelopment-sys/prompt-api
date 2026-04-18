@@ -1,4 +1,12 @@
-﻿import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Prompt } from './prompt.entity';
 
 @Entity('users')
@@ -14,4 +22,10 @@ export class User {
 
   @OneToMany(() => Prompt, (prompt) => prompt.user)
   prompts: Prompt[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
