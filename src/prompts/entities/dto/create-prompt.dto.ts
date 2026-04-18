@@ -27,6 +27,9 @@ export class CreatePromptDto {
   content: string;
 
   @IsOptional()
+  responseObject: string;
+
+  @IsOptional()
   @IsBoolean()
   @ApiPropertyOptional({ example: true, default: true })
   isActive?: boolean;

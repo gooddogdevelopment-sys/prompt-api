@@ -13,6 +13,9 @@ export class GetPromptDto {
   @ApiProperty({ example: true })
   isActive: boolean;
 
+  @ApiProperty({ example: {} })
+  responseObject?: string;
+
   @ApiProperty({ example: new Date() })
   createdAt: Date;
 

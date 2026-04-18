@@ -21,6 +21,7 @@ export class PromptsService {
     dto.isActive = prompt.isActive;
     dto.createdAt = prompt.createdAt;
     dto.updatedAt = prompt.updatedAt;
+    dto.responseObject = prompt.responseObject;
     return dto;
   }
 

@@ -4,6 +4,7 @@
   MinLength,
   IsOptional,
   IsBoolean,
+  IsObject,
 } from 'class-validator';
 import { ApiHideProperty } from '@nestjs/swagger';
 
@@ -19,6 +20,10 @@ export class UpdatePromptDto {
   @IsString()
   @IsNotEmpty()
   content: string;
+
+  @IsOptional()
+  @IsObject()
+  responseObject: string;
 
   @IsOptional()
   @IsBoolean()
