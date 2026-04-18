@@ -14,6 +14,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column('text')
   providerUserId: string; //This id is to store the third party auth user id.
 
